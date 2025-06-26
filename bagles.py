@@ -14,8 +14,9 @@ code_list = ""
 def game_loop():
     """Play the game."""
     games_rules()
-    generate_code()
-    input_guesses()
+    code_number = generate_code()
+    print(f"The code is {code_number}")
+    input_guesses(code_number)
 
 
 def games_rules():
@@ -29,27 +30,26 @@ def games_rules():
 
 def generate_code():
     """Randomly generate the code number between 100-999"""
-    code_number = random.randint(100, 999)
-    print(f"The code is {code_number}")
-    code_list = list(str(code_number))
-    print(code_list)
+    return random.randint(100, 999)
 
-def input_guesses():
+def input_guesses(code_number):
     """Prompt user to give their answer"""
+    code_number = code_number
     guesses = 10
-    guess = ""
     # build a loop that runs while number of guesses remains > 0 or guess != answer
     while guesses > 0:
         guess = input("Please enter a 3 digit number: ")
         guesses -= 1
-        guess_list = list(str(guess))
-        win_check(guess_list)
+        if win_check(guess, code_number):
+            break
         print(f"You have {guesses} left.")
 
-def win_check(guess):
+def win_check(guess, code_number):
     """Check if guess matches the code"""
-    print(f"Your guess is {guess} an the code is {code_number}")
-    if guess == code_list:
+    if int(guess) == code_number:
         print("Congratulations!  You win.")
+        return True
+
+        
 
 game_loop()
