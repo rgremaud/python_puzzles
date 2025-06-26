@@ -6,11 +6,6 @@
 
 import random
 
-# Lay out rules of the game via print
-
-code_number = ""
-code_list = ""
-
 def game_loop():
     """Play the game."""
     games_rules()
@@ -49,7 +44,5 @@ def win_check(guess, code_number):
     if int(guess) == code_number:
         print("Congratulations!  You win.")
         return True
-
-        
 
 game_loop()
