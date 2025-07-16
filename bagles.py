@@ -1,18 +1,4 @@
-
-# In Bagels, a deductive logic game, you must guess a secret three-digit number based on clues. 
-# The game offers one of the following hints in response to your guess: “Pico” when your guess 
-# has a correct digit in the wrong place, “Fermi” when your guess has a correct digit in the 
-# correct place, and “Bagels” if your guess has no correct digits. You have 10 tries to guess the secret number.
-
 import random
-
-def game_loop():
-    """Play the game."""
-    games_rules()
-    code_number = generate_code()
-    print(f"The code is {code_number}")
-    input_guesses(code_number)
-
 
 def games_rules():
     """Layout the rules of the game."""
@@ -29,20 +15,58 @@ def generate_code():
 
 def input_guesses(code_number):
     """Prompt user to give their answer"""
-    code_number = code_number
+    code = code_number
     guesses = 10
-    # build a loop that runs while number of guesses remains > 0 or guess != answer
+    
     while guesses > 0:
         guess = input("Please enter a 3 digit number: ")
         guesses -= 1
-        if win_check(guess, code_number):
+        
+        if win_check(guess, code):
             break
+        
+        clues = match_check(guess, code)
+        print_clues(random.shuffle(clues))
         print(f"You have {guesses} left.")
+
+def convert_to_int_array(string):
+    """Break number string into array of single integers"""
+    number_array = [int(number) for number in string]
+    
+    return number_array
+
+def match_check(guess, code_number):
+    """Check for exact matches between two arrays"""
+    int_guess = convert_to_int_array(guess)
+    int_code = convert_to_int_array(str(code_number))
+    clues = []
+    for i in range(len(int_guess)):
+        if int_guess[i] == int_code[i]:
+            clues.append("Fermi")
+        elif int_guess[i] in int_code:
+            clues.append("Pico")
+    
+    if len(clues) == 0: 
+        clues.append("Bagels")
+
+    return clues
+
+def print_clues(clues):
+    """Print the clues out to the user"""
+    for clue in clues:
+        print(clue)
 
 def win_check(guess, code_number):
     """Check if guess matches the code"""
     if int(guess) == code_number:
         print("Congratulations!  You win.")
         return True
+
+def game_loop():
+    """Play the game."""
+    games_rules()
+    code_number = generate_code()
+    print(f"The code is {code_number}")
+    input_guesses(code_number)
 
 game_loop()
