@@ -84,60 +84,63 @@ def build_calendar():
     year = get_year()
     first_day = date(year, month, 1)
     calendar_array = calendar_list(first_day)
-    print_calendar(calendar_array)
+    print_calendar(calendar_array, month, year)
 
 
-def print_calendar(calendar_array):
+def print_calendar(calendar_array, month, year):
     """Build the 7x6 grid to show calendar"""
-    # Build the top line with week days
-    week_day_line = ""
-    for day in week_days:
-        if len(day) == 6:
-            week_day_line += f"|  {day}  "
-        elif len(day) == 7:
-            week_day_line += f"| {day}  "
-        elif len(day) == 8:
-            week_day_line += f"| {day} "
-        elif len(day) == 9:
-            week_day_line += f"| {day}"
-    week_day_line += "|"
-
-    # Build a dotted line to divide
-    dotted_line = ("+----------" * 7) + "+"
-
-    detail_line = f"| {calendar_array[0].day}        | 2        | 3        | 4        | 5        | 6        | 7        |"
-    blank_line = (
-        "|          |          |          |          |          |          |          |"
+    reverse_month_hash = {value: key for key, value in month_hash.items()}
+    month_word = reverse_month_hash.get(month)
+    calendar_string = (
+        f"                             {month_word.capitalize()}, {year}\n"
     )
 
-    # Top line
-    print(week_day_line)
-    print(dotted_line)
-    # Detail 1
-    print(detail_line)
-    print(blank_line)
-    print(blank_line)
-    print(dotted_line)
-    print(detail_line)
-    print(blank_line)
-    print(blank_line)
-    print(dotted_line)
-    print(detail_line)
-    print(blank_line)
-    print(blank_line)
-    print(dotted_line)
-    print(detail_line)
-    print(blank_line)
-    print(blank_line)
-    print(dotted_line)
-    print(detail_line)
-    print(blank_line)
-    print(blank_line)
-    print(dotted_line)
-    print(detail_line)
-    print(blank_line)
-    print(blank_line)
-    print(dotted_line)
+    for day in week_days:
+        if len(day) == 6:
+            calendar_string += f"|  {day}  "
+        elif len(day) == 7:
+            calendar_string += f"| {day}  "
+        elif len(day) == 8:
+            calendar_string += f"| {day} "
+        elif len(day) == 9:
+            calendar_string += f"| {day}"
+    calendar_string += f"|\n"
+
+    # Build a dotted line to divide
+    dotted_line = ("+----------" * 7) + f"+\n"
+
+    # add initial dotted line
+    calendar_string += dotted_line
+
+    detail_array = ["|", "|", "|", "|", "|", "|"]
+
+    j, i = 0, 0
+    q = 0
+    r = 6
+    while j < 6:
+        while i >= q and i <= r:
+            if calendar_array[i].day > 9:
+                detail_array[j] += f" {calendar_array[i].day}       |"
+            elif calendar_array[i].day < 10:
+                detail_array[j] += f" {calendar_array[i].day}        |"
+
+            i += 1
+        q += 7
+        r += 7
+        j += 1
+
+    blank_line = (
+        ("|" + ("          |" * 7))
+        + f"\n"
+        + ("|" + ("          |" * 7) + f"\n" + dotted_line)
+    )
+
+    for detail in detail_array:
+        detail += f"\n"
+        detail += blank_line
+        calendar_string += detail
+
+    print(calendar_string)
 
 
 build_calendar()
