@@ -48,7 +48,20 @@ class GameOfLife:
     # Build a method to print out the cells as grid
     def print_grid(self):
         """Print grid of current cells"""
-        print(self.cells[(0, 0)])
+        j = 0
+        i = 0
+        grid = ""
+        print(f"heights is {self.height}")
+
+        while j <= self.height - 1:
+            while i <= self.width - 1:
+                grid += self.cells[(i, j)]
+                i += 1
+            grid += f"\n"
+            j += 1
+            i = 0
+
+        print(grid)
         # Build the grid by printing cells for each row until you hit the width-1
         # add in a space "\n"
         # repeat until count is equal to height-1
@@ -69,6 +82,6 @@ class GameOfLife:
     #   update to dead
 
 
-game = GameOfLife(width=100, height=30)
+game = GameOfLife(width=80, height=20)
 game.build_dictionary()
 game.print_grid()
